@@ -1,169 +1,69 @@
-# Simple Shell Project
+# 0x16. C - Simple Shell
+---
+## Description
+* Write a simple UNIX command interpreter.
+* Who designed and implemented the original Unix operating system
+* Who wrote the first version of the UNIX shell
+* Who invented the B programming language (the direct predecessor to the C programming language)
+* Who is Ken Thompson
+* How does a shell work
+* What is a pid and a ppid
+* How to manipulate the environment of the current process
+* What is the difference between a function and a system call
+* How to create processes
+* What are the three prototypes of main
+* How does the shell use the PATH to find the programs
+* How to execute another program with the execve system call
+* How to suspend the execution of a process until one of its children terminates
+* What is EOF / “end-of-file”?
 
-**A simple Unix command line interpreter**
-![shell](/shell.png)
+## Files
+---
+File|Contents
+---|---
+builtins.c | exit_sh, cd, printenv, checkBuiltins - functions
+env.c | env - function to write enviroment
+execute.c | execute - function to execute, implement fork and child process
+getcommand.c | get_line, split_line - functions get input from stdin and tokenize
+getpath.c | pathCat, get_env, dirTok, checkPath - functions get PATH from environment
+handler.c | handler - function to handle when a signal is passed
+helper.c | _strcmp, _strdup, _strlen - helper functions used throughout
+loop.c | main loop to initiate shell
+main.c | main function that calls loop
+prompt.c | prompt - function to print prompt "$ "
+shell.h | header file with libraries and prototypes
 
-****
-## Table of contents
- - **What is the shell?**
- - **About this project**
- - **Essential Functionalities of the Simple Shell**
- - **File description**
- - **List of allowed functions and system calls for this project**
- - **USAGE**
- - **Example of Usage**
- - **Bugs**
- - **TEAM**
- ****
+Directory Name | Description
+---|---
+simple_shell |A simple UNIX command interpreter
 
-## What is the shell?
-The shell is a program that takes commands from the keyboard via the terminal, and gives them to the operating system to perform.\
-**To better understand how the shell actually works, you can read our [Article].**
+## How to compile
+gcc 4.8.4 using the flags -Wall -Werror -Wextra and -pedantic<br/>
+___gcc -Wall -Werror -Wextra -pedantic *.c -o hsh___
+## More Info
+All files are formatted in Betty style and checked using betty-style.pl and betty-doc.pl
+All header files are guarded
+## Example
+##### The shell should work like this in interactive mode:<br/>
+*$ ./hsh*<br/>
+*($) /bin/ls*<br/>
+*hsh main.c shell.c*<br/>
+*($)*<br/>
+*($) exit*<br/>
+*$*<br/>
 
-## About this project
-This project is a simple version of the linux shell made for [The Room/aLx] taking part of the "Low-level programming & Algorithm - Linux and Unix system programming" projects.\
-It is created using the **C programming Language** and it can do many functionalities that a real shell does.
+##### Also like this in non-interactive mode:<br/>
+*$ echo "/bin/ls" | ./hsh*<br/>
+*hsh main.c shell.c test_ls_2*<br/>
+*$*<br/>
+*$ cat test_ls_2*<br/>
+*/bin/ls*<br/>
+*/bin/ls*<br/>
+*$*<br/>
+*$ cat test_ls_2 | ./hsh*<br/>
+*hsh main.c shell.c test_ls_2*<br/>
+*hsh main.c shell.c test_ls_2*<br/>
+*$*<br/>
 
-## Essential Functionalities of the Simple Shell:
-> Displays a prompt "#cisfun$ " and waits for user input.\
-> Runs all commands of type "executable program" (ls and /bin/ls).\
-> Runs the following build_in commands: **exit**, **env**, **setenv** and **unsetenv**.\
-> Handles commands with arguments.\
-> Handles the PATH global variable.\
-> Handles The EOF (End Of File) condition.\
-> Handles the Ctrl + C signal -> It doesn't exit the shell
-
-## Files description
- - **AUTHORS** -> List of contributors to this repository
- - **man_1_simple_shell** -> Manual page for the simple_shell
- - **shell.h** -> Header file
- - **shell.c** -> main function
- - **sig_handler** -> handles the Ctrl + C signal
- - **_EOF** -> handles the End Of File condition
- - **string.c**
- - **_putchar** -> prints a character
- - **_puts** -> prints a string
- - **_strlen** -> gives the length of a string
- - **_strdup** -> copies a string in a newly allocated memory
- - **concat_all** -> concatenates 3 strings in a newly allocated memory
- - **line_exec.c**
- - **splitstring** -> splits a string into an array of words
- - **execute** -> executes a command using execve
- - **realloc** -> reallocates a memory block
- - **freearv** -> frees a 2 dimensional array
- - **linkpath.c**
- - **_getenv** -> returns the value of a global variable
- - **add_node_end** -> adds a node in a singly linked list
- - **linkpath** -> creates a singly linked list for PATH directories
- - **_which** -> finds the pathname of a command
- - **free_list** -> frees the linked list of PATH value
- - **checkbuild.c**
- - **checkbuild** -> checks if a command is a build-in command
- - **buildin.c**
- - **exitt** -> handles the exit buildin command
- - **_atoi** -> converts a string into an integer
- - **env** -> prints the current environment
- - **_setenv** -> Initialize a new global variable, or modify an existing one
- - **_unsetenv** -> remove a global variable
-
-****
-## List of allowed functions and system calls for this project
- - access (man 2 access)
- - chdir (man 2 chdir)
- - close (man 2 close)
- - closedir (man 3 closedir)
- - execve (man 2 execve)
- - exit (man 3 exit)
- - _exit (man 2 _exit)
- - fflush (man 3 fflush)
- - fork (man 2 fork)
- - free (man 3 free)
- - getcwd (man 3 getcwd)
- - getline (man 3 getline)
- - isatty (man 3 isatty)
- - kill (man 2 kill)
- - malloc (man 3 malloc)
- - open (man 2 open)
- - opendir (man 3 opendir)
- - perror (man 3 perror)
- - read (man 2 read)
- - readdir (man 3 readdir)
- - signal (man 2 signal)
- - stat (__xstat) (man 2 stat)
- - lstat (__lxstat) (man 2 lstat)
- - fstat (__fxstat) (man 2 fstat)
- - strtok (man 3 strtok)
- - wait (man 2 wait)
- - waitpid (man 2 waitpid)
- - wait3 (man 2 wait3)
- - wait4 (man 2 wait4)
- - write (man 2 write)
-****
-
-## USAGE
-You can try our shell by following these steps:
-> **Step 1:** Clone our repository using this command, (you need to have git installed on your machine first)
-````
-git clone https://github.com/radu2022/simple_shell
-````
-> **Step 2:** Change directory to simple_shell:
-````
-cd simple_shell
-````
-> **Step 3:** Compile the C files in this way:
-````
-gcc -Wall -Werror -Wextra -pedantic *.c -o hsh
-````
-> **Step 4:** Run the shell
-````
-./hsh
-````
-**Exiting the shell**
-When you want to exit the shell, you can use one of the following methods:
-> **1: Type the command "exit"**
-````
-exit
-````
-> **2: Press on Ctrl + D**
-
-## Example of Usage
-````
-ubunto@ubuntu:~/Bureau/simple_shell$ gcc -Wall -Wextra -Werror -pedantic *.c -o hsh
-ubunto@ubuntu:~/Bureau/simple_shell$ ./hsh
-#cisfun$ echo Hello, This is an example
-Hello, This is an example
-#cisfun$ ls
-README.md  checkbuild.c  line_exec.c  shell.c  string.c
-buildin.c  hsh		 	       	              linkpath.c   shell.h
-#cisfun$ ^C
-#cisfun$ ls -l
-total 52
--rw-r--r-- 1 ubunto ubunto  3067 Nov 26 04:22 README.md
--rw-r--r-- 1 ubunto ubunto  2183 Nov 24 16:17 buildin.c
--rw-r--r-- 1 ubunto ubunto   574 Nov 24 15:59 checkbuild.c
--rwxr-xr-x 1 ubunto ubunto 18144 Nov 26 04:22 hsh
--rw-r--r-- 1 ubunto ubunto  2091 Nov 24 14:49 line_exec.c
--rw-r--r-- 1 ubunto ubunto  1926 Nov 24 14:30 linkpath.c
--rw-r--r-- 1 ubunto ubunto   951 Nov 24 16:09 shell.c
--rw-r--r-- 1 ubunto ubunto  1351 Nov 24 15:58 shell.h
--rw-r--r-- 1 ubunto ubunto  1727 Nov 24 14:30 string.c
-#cisfun$ exit
-ubunto@ubuntu:~/Bureau/simple_shell$
-````
-## Bugs
-No known Bugs.
-
-## TEAM
-Seid H Muhammed: [GitHub/radu2022]
-Aman Gebretsadik
-
-[GitHub/radu2022]: <https://github.com/radu2022>
-
-## AUTHOR DESCRIPTION (radu2022)
- - I'm a Food Process Engineer and a software engineering student at Holberton School.
-  - I have been studying low-level programming, high-level
- programming, system engineering and devops, and web
- stack programming (Front-end & Back-end) using a
- methodology based on peer-learning and projects.
-  - I'm curious, adaptable, a fast learner and I love developing
- my skills.
+## Authors
+Seid Hamid & Amanuel Mekonnen

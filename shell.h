@@ -1,67 +1,39 @@
-#ifndef SHELL_H
-#define SHELL_H
+#ifndef _SHELL_H_
+#define _SHELL_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
-#include <sys/wait.h>
+#include <stdio.h>
+#include <unistd.h>
 #include <sys/types.h>
-#include <errno.h>
-#include <stddef.h>
+#include <sys/wait.h>
 #include <sys/stat.h>
+#include <stdlib.h>
 #include <signal.h>
-
-int _putchar(char c);
-void _puts(char *str);
-int _strlen(char *s);
-char *_strdup(char *str);
-char *concat_all(char *name, char *sep, char *value);
-
-char **splitstring(char *str, const char *delim);
-void execute(char **argv);
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
-
-
 extern char **environ;
+extern int dircount;
+#define DELIM " \n\t"
 
-/**
- * struct list_path - Linked list containing PATH directories
- * @dir: directory in path
- * @p: pointer to next node
- */
-typedef struct list_path
-{
-	char *dir;
-	struct list_path *p;
-} list_path;
-
-
-char *_getenv(const char *name);
-list_path *add_node_end(list_path **head, char *str);
-list_path *linkpath(char *path);
-char *_which(char *filename, list_path *head);
-
-/**
- * struct mybuild - pointer to function with corresponding buildin command
- * @name: buildin command
- * @func: execute the buildin command
- */
-typedef struct mybuild
-{
-	char *name;
-	void (*func)(char **);
-} mybuild;
-
-void(*checkbuild(char **arv))(char **arv);
-int _atoi(char *s);
-void exitt(char **arv);
-void env(char **arv);
-void _setenv(char **arv);
-void _unsetenv(char **arv);
-
-void freearv(char **arv);
-void free_list(list_path *head);
-
-
+void env(char **env);
+int _strlen(char *s);
+int _strcmp(char *s1, char *s2);
+char *_strdup(char *str);
+void prompt(void);
+char *get_line(void);
+char **split_line(char *line);
+char *get_env(char **env);
+char *pathCat(char *dir, char *av);
+char **dirTok(char **env);
+void loop(char **env);
+char *checkPath(char **dir, char *command);
+int execute(char *fullPath, char **command);
+int exit_sh(char **command);
+int cd(char **command);
+int printenv(char **command);
+int checkBuiltins(char *combine, char **command);
+void handler(int sig);
+void buffers1(char *line, char **command);
+void buffers2(char **dir, char *combine);
+void buffers3(char **tokens, char *buf);
+void buffers4(char **tok, char *buf2);
+void buffers5(char *dup);
 #endif
